@@ -41,7 +41,7 @@ function VerifyDlc(questions) {
  * @brief Функція відправки результатів у Google Sheets
  */
 const submitToGoogleSheets = async (candidateName, examinerInstance) => {
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbqOUIuaF2HkwkraE6GcOorzAoQMOZkO7PiABWKxDSj1LMOb22JS1HjAgJZggnlYQZ4A/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz58wcwvXl-K4L-wo2Bub0ec0aMlbO1MBKQ1FXjCk86BxmNZGthk6ytn15KUfMfM-FgVg/exec"; 
     
     const payload = {
         token: "MySecretKey", //  секретний ключ для доступу
