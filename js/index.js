@@ -114,10 +114,8 @@ function nextQuestion() {
 }
 
 
-
 /**
  * @brief Checks the answers and shows the correct answer
- * 
  */
 function checkAnswers() {
     let allcorrect = true;
@@ -148,30 +146,35 @@ function checkAnswers() {
 
     if (allcorrect) {
         examiner.RemoveCurrentQuestion();
+        // Додаємо бал в екземпляр класу для Google Sheets
+        examiner.score = (examiner.score || 0) + 1; 
+
         document.getElementById('question-list-item-' + question.id).classList.add("correct");
-        console.log("Removed Question ID: " + question["id"]);
+        
         if (examiner.IsEnd) {
-            //alert("Congratulations! You have answered all questions correctly!");
-            document.getElementById("checkButton").innerHTML = "LET'S GOO";
+            document.getElementById("checkButton").innerHTML = "FINISH & SAVE";
             document.getElementById("checkButton").onclick = function () {
-                showEndscreen("Congratulations!", "You have answered all questions correctly!");
+                // ПИТАЄМО ІМ'Я КАНДИДАТА
+                const candidateName = prompt("Вітаємо! Тест пройдено. Введіть ваше Прізвище та Ім'я для збереження результату:");
+                
+                if (candidateName) {
+                    // ВИКЛИКАЄМО МЕТОД ВІДПРАВКИ, ЯКИЙ МИ ДОДАЛИ В EXAMINER.JS
+                    examiner.Finish(candidateName);
+                    showEndscreen("Дякуємо!", "Ваш результат успішно збережено в системі.");
+                } else {
+                    showEndscreen("Вітаємо!", "Ви пройшли тест, але результат не було збережено (ім'я порожнє).");
+                }
             }
             return;
         }
-        console.log("All correct");
     }
     else {
         document.getElementById('question-list-item-' + question.id).classList.add("wrong");
-        console.log("Not all correct");
     }
 
     document.getElementById("checkButton").onclick = nextQuestion;
     document.getElementById("checkButton").innerHTML = "Next - " + (examiner.GetQuestionCount) + " to go";
 }
-
-
-
-
 
 
 

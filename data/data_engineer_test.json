@@ -1,0 +1,129 @@
+{
+  "questions": [
+    {
+      "question": "Який метод у Pandas найшвидший для додавання двох колонок?",
+      "options": ["df.apply(axis=1)", "df.iterrows()", "df['A'] + df['B']", "df.map()"],
+      "answer": "df['A'] + df['B']"
+    },
+    {
+      "question": "Який параметр у pd.merge() відповідає за 'LEFT JOIN'?",
+      "options": ["how='left'", "on='left'", "join='outer'", "type='left'"],
+      "answer": "how='left'"
+    },
+    {
+      "question": "Як видалити всі рядки з NaN?",
+      "options": ["df.remove_nulls()", "df.dropna()", "df.clean()", "df.fillna()"],
+      "answer": "df.dropna()"
+    },
+    {
+      "question": "Яка функція конвертує колонку у формат datetime?",
+      "options": ["pd.as_date()", "pd.to_datetime()", "df.parse_date()", "df.set_time()"],
+      "answer": "pd.to_datetime()"
+    },
+    {
+      "question": "Як вибрати рядки, де значення в колонці 'A' більше 10?",
+      "options": ["df.select(A > 10)", "df[df['A'] > 10]", "df.filter('A > 10')", "df.find(A > 10)"],
+      "answer": "df[df['A'] > 10]"
+    },
+    {
+      "question": "Що повертає df.shape?",
+      "options": ["Кількість елементів", "Список колонок", "Кортеж (рядки, колонки)", "Типи даних"],
+      "answer": "Кортеж (рядки, колонки)"
+    },
+    {
+      "question": "Метод для об'єднання DataFrame за індексом?",
+      "options": ["df.join()", "df.append()", "df.connect()", "df.attach()"],
+      "answer": "df.join()"
+    },
+    {
+      "question": "Як перейменувати колонку 'old' на 'new'?",
+      "options": ["df.rename(columns={'old': 'new'})", "df.change('old', 'new')", "df.columns['old'] = 'new'", "df.set_name('new')"],
+      "answer": "df.rename(columns={'old': 'new'})"
+    },
+    {
+      "question": "Який метод повертає перші 5 рядків?",
+      "options": ["df.first(5)", "df.get(5)", "df.head()", "df.top(5)"],
+      "answer": "df.head()"
+    },
+    {
+      "question": "Як згрупувати дані за колонкою 'City'?",
+      "options": ["df.group('City')", "df.aggregate('City')", "df.groupby('City')", "df.split('City')"],
+      "answer": "df.groupby('City')"
+    },
+    {
+      "question": "Що робить df.describe()?",
+      "options": ["Виводить типи даних", "Показує статистику (mean, std тощо)", "Малює графік", "Перевіряє на NaN"],
+      "answer": "Показує статистику (mean, std тощо)"
+    },
+    {
+      "question": "Як перевірити DataFrame на наявність порожніх значень?",
+      "options": ["df.empty()", "df.isnull().sum()", "df.is_na()", "df.check_null()"],
+      "answer": "df.isnull().sum()"
+    },
+    {
+      "question": "Який метод змінює індекс DataFrame?",
+      "options": ["df.reindex()", "df.set_index()", "df.index_as()", "df.make_index()"],
+      "answer": "df.set_index()"
+    },
+    {
+      "question": "Як отримати унікальні значення в колонці?",
+      "options": ["df['A'].distinct()", "df['A'].unique()", "df['A'].single()", "df['A'].values()"],
+      "answer": "df['A'].unique()"
+    },
+    {
+      "question": "Метод для заповнення NaN конкретним значенням?",
+      "options": ["df.replace_nan()", "df.fillna()", "df.set_na()", "df.fix_null()"],
+      "answer": "df.fillna()"
+    },
+    {
+      "question": "Як видалити колонку 'Salary'?",
+      "options": ["df.drop('Salary', axis=1)", "df.remove('Salary')", "del df.Salary", "Обидва 1 та 3"],
+      "answer": "Обидва 1 та 3"
+    },
+    {
+      "question": "Яка функція читає CSV файл?",
+      "options": ["pd.get_csv()", "pd.open_csv()", "pd.read_csv()", "pd.load_csv()"],
+      "answer": "pd.read_csv()"
+    },
+    {
+      "question": "Як змінити тип даних колонки на float?",
+      "options": ["df['A'].to_type(float)", "df['A'].astype(float)", "df['A'].cast(float)", "df['A'].convert(float)"],
+      "answer": "df['A'].astype(float)"
+    },
+    {
+      "question": "Що робить параметр inplace=True?",
+      "options": ["Створює копію", "Змінює оригінальний об'єкт", "Прискорює роботу", "Видаляє індекс"],
+      "answer": "Змінює оригінальний об'єкт"
+    },
+    {
+      "question": "Як отримати список імен усіх колонок?",
+      "options": ["df.names", "df.columns", "df.get_columns()", "df.headers"],
+      "answer": "df.columns"
+    },
+    {
+      "question": "Метод для сортування за значенням?",
+      "options": ["df.sort()", "df.order_by()", "df.sort_values()", "df.arrange()"],
+      "answer": "df.sort_values()"
+    },
+    {
+      "question": "Як транспонувати DataFrame?",
+      "options": ["df.T", "df.swap()", "df.transpose()", "Обидва 1 та 3"],
+      "answer": "Обидва 1 та 3"
+    },
+    {
+      "question": "Який метод об'єднує DataFrame вертикально (stacking)?",
+      "options": ["pd.merge()", "pd.concat()", "pd.combine()", "pd.stack()"],
+      "answer": "pd.concat()"
+    },
+    {
+      "question": "Як знайти суму значень у колонці?",
+      "options": ["df['A'].sum()", "sum(df['A'])", "df.add('A')", "Обидва 1 та 2"],
+      "answer": "Обидва 1 та 2"
+    },
+    {
+      "question": "Який параметр у read_csv вказує роздільник?",
+      "options": ["split", "delimiter або sep", "parse", "div"],
+      "answer": "delimiter або sep"
+    }
+  ]
+}

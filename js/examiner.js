@@ -1,13 +1,12 @@
-
 /**
- * @brief Checks if the DLC is supported
- * 
- * @param {*} questions Loaded .dlc file 
- * @returns false if the file is not supported
+ * @brief Перевірка, чи підтримується формат DLC (JSON-файлу з тестами)
+ * * @param {*} questions Завантажений об'єкт з файлу
+ * @returns false, якщо структура не підтримується
  */
 function VerifyDlc(questions) {
+    // Examiner-v2 очікує дані в полі "data"
     if (questions["data"] == undefined) {
-        showEndscreen("Error", "Could not find data in DLC file :(");
+        showEndscreen("Error", "Could not find 'data' key in DLC file :(");
         return false;
     }
 
@@ -16,29 +15,59 @@ function VerifyDlc(questions) {
         return false;
     }
 
+    // Перевірка версії ( "version": "1.0" у JSON)
     if (!supportedVersions.includes(questions["version"])) {
-        showEndscreen("Error", "Unsupported DLC version :(<br><br>Take a look at <a href='https://github.com/adaxiik/examiner-v2/releases/tag/release'>releases</a> for supported versions");
+        showEndscreen("Error", "Unsupported DLC version :(<br><br>Check supported versions in releases.");
         return false;
     }
-    // each question in data must contains "type"
+
+    // Перевірка наявності типу для кожного питання
     for (let i = 0; i < questions["data"].length; i++) {
         var qtype = questions["data"][i]["type"];
         if (qtype == undefined) {
-            showEndscreen("Error", "Could not find type in question with id " + questions["data"][i]["id"] + " :(");
+            showEndscreen("Error", "Missing 'type' in question ID " + (questions["data"][i]["id"] || i) + " :(");
             return false;
         }
         if (!supportedQuestionTypes.includes(qtype)) {
-            showEndscreen("Error", "Unsupported question type in question with id " + questions["data"][i]["id"] + " :(");
+            showEndscreen("Error", "Unsupported question type: " + qtype);
             return false;
         }
     }
-
-
-
 
     return true;
 }
 
+/**
+ * @brief Функція відправки результатів у Google Sheets
+ */
+const submitToGoogleSheets = async (candidateName, examinerInstance) => {
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbqOUIuaF2HkwkraE6GcOorzAoQMOZkO7PiABWKxDSj1LMOb22JS1HjAgJZggnlYQZ4A/exec"; 
+    
+    const payload = {
+        token: "MySecretKey", //  секретний ключ для доступу
+        name: candidateName,
+        testTitle: examinerInstance.title || "Technical Test",
+        score: examinerInstance.score || 0,
+        percent: Math.round(((examinerInstance.score || 0) / examinerInstance.questions.length) * 100),
+        details: examinerInstance.questions.map(q => ({
+            question: q.question,
+            userAnswer: q.userAnswer || "Немає відповіді",
+            correctAnswer: q.answer
+        }))
+    };
+
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Обов'язково для Google Apps Script
+            cache: 'no-cache',
+            body: JSON.stringify(payload)
+        });
+        console.log("Результати успішно надіслано до Google Sheets");
+    } catch (error) {
+        console.error("Помилка при відправці даних:", error);
+    }
+};
 
 class QuestionPool {
     constructor(size) {
@@ -61,7 +90,6 @@ class QuestionPool {
     }
 
     GetRandomQuestion() {
-        this.currentQuestion;
         do {
             this.currentQuestion = Math.floor(Math.random() * this.questions.length);
         } while (this.currentQuestion == this.previousQuestion && this.questions.length > 1);
@@ -76,22 +104,40 @@ class QuestionPool {
 }
 
 class Examiner {
-    constructor(questions, poolsize = 5) {
-        this.questions = shuffle(questions);
+    constructor(questions, title = "Technical Test", poolsize = 5) {
+        this.title = title;
+        this.questions = shuffle(questions); // Масив усіх питань
         this.questionIndex = 0;
+        this.score = 0; // Набрані бали
         this.end = false;
         this.questionPool = new QuestionPool(poolsize);
-
         this.startTime = new Date();
-        let qListElement = document.getElementById('questionList');
-        questions.forEach((question, key) => {
-            let qElement = document.createElement('div');
-            qElement.innerText = key + 1;
-            qElement.id = 'question-list-item-' + question.id;
-            qListElement.appendChild(qElement);
-        });
 
+        this.InitUI();
         this.FillQuestionPool();
+    }
+
+    InitUI() {
+        let qListElement = document.getElementById('questionList');
+        if (qListElement) {
+            qListElement.innerHTML = ''; 
+            this.questions.forEach((question, key) => {
+                let qElement = document.createElement('div');
+                qElement.innerText = key + 1;
+                qElement.id = 'question-list-item-' + (question.id || key);
+                qListElement.appendChild(qElement);
+            });
+        }
+    }
+
+    /**
+     * @brief Завершення тесту та ініціація відправки даних
+     */
+    Finish(candidateName) {
+        if (!candidateName) {
+            candidateName = "Anonymous_Candidate";
+        }
+        submitToGoogleSheets(candidateName, this);
     }
 
     GetQuestion() {
